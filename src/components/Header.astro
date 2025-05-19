@@ -1,0 +1,17 @@
+---
+import Navigation from "./Navigation.astro";
+---
+
+<header
+  class="fixed top-0 w-full z-50 backdrop-blur-sm bg-white/80 dark:bg-neutral-900/80 border-b border-neutral-200 dark:border-neutral-800 transition-colors duration-300"
+>
+  <div class="container-custom flex items-center justify-between h-16">
+    <a
+      href="/"
+      class="font-bold text-xl text-primary-600 dark:text-primary-400 flex items-center gap-2"
+    >
+      <span>Portfolio</span>
+    </a>
+    <Navigation />
+  </div>
+</header>

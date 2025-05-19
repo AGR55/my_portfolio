@@ -1,0 +1,105 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import ProjectCard from "../../components/ProjectCard.astro";
+import { getCollection } from "astro:content";
+
+// Get all projects
+const allProjects = await getCollection("projects");
+const projects = allProjects.sort((a, b) => {
+  if (a.data.featured && !b.data.featured) return -1;
+  if (!a.data.featured && b.data.featured) return 1;
+  return new Date(b.data.date).getTime() - new Date(a.data.date).getTime();
+});
+
+// Get unique categories
+const categories = ["All"];
+projects.forEach(project => {
+  project.data.tags.forEach(tag => {
+    if (!categories.includes(tag)) {
+      categories.push(tag);
+    }
+  });
+});
+---
+
+<Layout
+  title="Projects - Your Name"
+  description="A showcase of my recent projects and work."
+>
+  <div class="pt-32 pb-16 md:pt-40 md:pb-24">
+    <div class="container-custom">
+      <h1 class="heading-lg mb-6 text-primary-600 dark:text-primary-400">Projects</h1>
+      <p class="body-lg text-gray-600 dark:text-gray-400 max-w-3xl mb-12">
+        A collection of my recent work, side projects, and open-source contributions. Each project demonstrates different skills and technologies.
+      </p>
+      
+      <!-- Categories filter -->
+      <div class="flex flex-wrap justify-center gap-2 mb-12">
+        {categories.map((category, index) => (
+          <button 
+            class={`py-2 px-4 rounded-full transition-colors ${index === 0 ? 'bg-primary-600 text-white dark:bg-primary-500' : 'bg-gray-100 text-gray-800 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700'}`}
+            data-filter={category}
+          >
+            {category}
+          </button>
+        ))}
+      </div>
+      
+      <!-- Projects grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="projects-grid">
+        {projects.map((project) => (
+          <div data-tags={project.data.tags.join(',')}>
+            <ProjectCard 
+              title={project.data.title}
+              description={project.data.description}
+              image={project.data.image}
+              tags={project.data.tags}
+              url={`/projects/${project.slug}`}
+              github={project.data.github}
+              live={project.data.live}
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  // Projects filtering functionality
+  document.addEventListener('DOMContentLoaded', () => {
+    const filterButtons = document.querySelectorAll('[data-filter]');
+    const projectCards = document.querySelectorAll('#projects-grid > div');
+    
+    filterButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const filter = button.getAttribute('data-filter');
+        
+        // Update active button styles
+        filterButtons.forEach(btn => {
+          btn.classList.remove('bg-primary-600', 'text-white', 'dark:bg-primary-500');
+          btn.classList.add('bg-gray-100', 'text-gray-800', 'dark:bg-gray-800', 'dark:text-gray-200');
+        });
+        
+        button.classList.remove('bg-gray-100', 'text-gray-800', 'dark:bg-gray-800', 'dark:text-gray-200');
+        button.classList.add('bg-primary-600', 'text-white', 'dark:bg-primary-500');
+        
+        // Filter projects
+        if (filter === 'All') {
+          projectCards.forEach(card => {
+            card.style.display = 'block';
+          });
+        } else {
+          projectCards.forEach(card => {
+            const cardTags = card.getAttribute('data-tags')?.split(',') || [];
+            if (cardTags.includes(filter)) {
+              card.style.display = 'block';
+            } else {
+              card.style.display = 'none';
+            }
+          });
+        }
+      });
+    });
+  });
+</script>

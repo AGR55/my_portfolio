@@ -1,0 +1,98 @@
+---
+import ProjectCard from "../ProjectCard.astro";
+import { type CollectionEntry } from "astro:content";
+
+interface Props {
+  projects: CollectionEntry<"projects">[];
+}
+
+const { projects } = Astro.props;
+
+// Project categories for filtering
+const categories = ["All", "Web Development", "Design", "Mobile", "Open Source"];
+---
+
+<section id="projects" class="section-padding">
+  <div class="container-custom">
+    <div class="max-w-3xl mx-auto text-center mb-12 animate-on-scroll">
+      <h2 class="heading-lg mb-4 text-primary-600 dark:text-primary-400">Featured Projects</h2>
+      <p class="body-lg text-gray-600 dark:text-gray-400">
+        Here are some of my recent projects. Each one was carefully crafted with attention to detail, performance, and user experience.
+      </p>
+    </div>
+    
+    <!-- Categories filter -->
+    <div class="flex flex-wrap justify-center gap-2 mb-12 animate-on-scroll">
+      {categories.map((category, index) => (
+        <button 
+          class={`py-2 px-4 rounded-full transition-colors ${index === 0 ? 'bg-primary-600 text-white dark:bg-primary-500' : 'bg-gray-100 text-gray-800 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700'}`}
+          data-filter={category}
+        >
+          {category}
+        </button>
+      ))}
+    </div>
+    
+    <!-- Projects grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12" id="projects-grid">
+      {projects.map((project, index) => (
+        <div class="animate-on-scroll" style={`transition-delay: ${index * 0.1}s`}>
+          <ProjectCard 
+            title={project.data.title}
+            description={project.data.description}
+            image={project.data.image}
+            tags={project.data.tags}
+            url={`/projects/${project.slug}`}
+            github={project.data.github}
+            live={project.data.live}
+          />
+        </div>
+      ))}
+    </div>
+    
+    <div class="text-center animate-on-scroll">
+      <a href="/projects" class="btn-primary">
+        View All Projects
+      </a>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Projects filtering functionality
+  document.addEventListener('DOMContentLoaded', () => {
+    const filterButtons = document.querySelectorAll('[data-filter]');
+    const projectCards = document.querySelectorAll('#projects-grid > div');
+    
+    filterButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const filter = button.getAttribute('data-filter');
+        
+        // Update active button styles
+        filterButtons.forEach(btn => {
+          btn.classList.remove('bg-primary-600', 'text-white', 'dark:bg-primary-500');
+          btn.classList.add('bg-gray-100', 'text-gray-800', 'dark:bg-gray-800', 'dark:text-gray-200');
+        });
+        
+        button.classList.remove('bg-gray-100', 'text-gray-800', 'dark:bg-gray-800', 'dark:text-gray-200');
+        button.classList.add('bg-primary-600', 'text-white', 'dark:bg-primary-500');
+        
+        // Filter projects
+        if (filter === 'All') {
+          projectCards.forEach(card => {
+            card.style.display = 'block';
+          });
+        } else {
+          projectCards.forEach(card => {
+            const cardTags = card.querySelector('[data-tags]')?.getAttribute('data-tags')?.split(',') || [];
+            if (cardTags.includes(filter)) {
+              card.style.display = 'block';
+            } else {
+              card.style.display = 'none';
+            }
+          });
+        }
+      });
+    });
+  });
+</script>

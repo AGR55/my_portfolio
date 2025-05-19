@@ -1,0 +1,77 @@
+---
+const navItems = [
+  { text: "Home", url: "/" },
+  { text: "About", url: "/#about" },
+  { text: "Projects", url: "/#projects" },
+  { text: "Blog", url: "/blog" },
+  { text: "Contact", url: "/#contact" },
+];
+---
+
+<nav>
+  <!-- Mobile Navigation -->
+  <div class="md:hidden">
+    <button id="mobile-menu-button" aria-label="Open Menu" class="text-gray-800 dark:text-gray-200 hover:text-primary-600 dark:hover:text-primary-400">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+    </button>
+    
+    <div id="mobile-menu" class="fixed inset-0 bg-white dark:bg-gray-900 z-50 flex flex-col items-center justify-center space-y-8 transform translate-x-full transition-transform duration-300 ease-in-out">
+      <button id="close-menu-button" aria-label="Close Menu" class="absolute top-4 right-4 text-gray-800 dark:text-gray-200 hover:text-primary-600 dark:hover:text-primary-400">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+      
+      {navItems.map((item) => (
+        <a 
+          href={item.url}
+          class="text-2xl font-medium text-gray-800 dark:text-gray-200 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+        >
+          {item.text}
+        </a>
+      ))}
+    </div>
+  </div>
+  
+  <!-- Desktop Navigation -->
+  <ul class="hidden md:flex space-x-8">
+    {navItems.map((item) => (
+      <li>
+        <a 
+          href={item.url}
+          class="font-medium text-gray-800 dark:text-gray-200 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+        >
+          {item.text}
+        </a>
+      </li>
+    ))}
+  </ul>
+</nav>
+
+<script>
+  // Mobile menu functionality
+  const mobileMenuButton = document.getElementById('mobile-menu-button');
+  const closeMenuButton = document.getElementById('close-menu-button');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const mobileMenuLinks = mobileMenu?.querySelectorAll('a');
+  
+  function openMenu() {
+    mobileMenu?.classList.remove('translate-x-full');
+    document.body.style.overflow = 'hidden'; // Prevent scrolling
+  }
+  
+  function closeMenu() {
+    mobileMenu?.classList.add('translate-x-full');
+    document.body.style.overflow = ''; // Restore scrolling
+  }
+  
+  mobileMenuButton?.addEventListener('click', openMenu);
+  closeMenuButton?.addEventListener('click', closeMenu);
+  
+  // Close menu when clicking on a link
+  mobileMenuLinks?.forEach(link => {
+    link.addEventListener('click', closeMenu);
+  });
+</script>
