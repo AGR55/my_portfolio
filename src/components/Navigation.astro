@@ -1,112 +1,136 @@
 ---
 const navItems = [
-  { text: "Home", url: "/" },
-  { text: "About", url: "/#about" },
-  { text: "Projects", url: "/#projects" },
-  { text: "Blog", url: "/blog" },
-  { text: "Contact", url: "/#contact" },
+  { name: "Home", url: "/#", ariaLabel: "Go to home page" },
+  { name: "About", url: "/#about", ariaLabel: "Learn about me" },
+  { name: "Projects", url: "/#projects", ariaLabel: "View my projects" },
+  { name: "Contact", url: "/#contact", ariaLabel: "Get in touch" },
 ];
 ---
 
-<nav>
-  <!-- Mobile Navigation -->
-  <div class="md:hidden">
-    <button
-      id="mobile-menu-button"
-      aria-label="Open Menu"
-      class="text-neutral-800 dark:text-neutral-200 hover:text-primary-600 dark:hover:text-primary-400"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="h-6 w-6"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M4 6h16M4 12h16M4 18h16"></path>
-      </svg>
-    </button>
-
-    <div
-      id="mobile-menu"
-      class="fixed inset-0 bg-white dark:bg-neutral-900 z-50 flex flex-col items-center justify-center space-y-8 transform translate-x-full transition-transform duration-300 ease-in-out"
-    >
-      <button
-        id="close-menu-button"
-        aria-label="Close Menu"
-        class="absolute top-4 right-4 text-neutral-800 dark:text-neutral-200 hover:text-primary-600 dark:hover:text-primary-400"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-6 w-6"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
+<nav class="relative z-50">
+  <!-- Desktop Navigation -->
+  <div class="hidden md:flex items-center space-x-8">
+    {
+      navItems.map((item) => (
+        <a
+          href={item.url}
+          class="text-neutral-400 hover:text-neutral-200 transition-colors duration-300 py-1 relative group"
+          aria-label={item.ariaLabel}
         >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M6 18L18 6M6 6l12 12"></path>
-        </svg>
-      </button>
+          {/* Línea de destaque al hacer hover */}
+          <span class="absolute bottom-0 left-0 w-0 h-px bg-neutral-500 transition-all duration-300 group-hover:w-full"></span>
+          {item.name}
+        </a>
+      ))
+    }
+  </div>
 
+  <!-- Mobile Navigation Toggle Button -->
+  <button
+    id="mobile-nav-toggle"
+    class="md:hidden flex items-center text-neutral-400 hover:text-neutral-200 transition-colors"
+    aria-label="Toggle navigation menu"
+  >
+    <svg
+      id="hamburger-icon"
+      xmlns="http://www.w3.org/2000/svg"
+      class="h-6 w-6"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M4 6h16M4 12h16M4 18h16"
+      ></path>
+    </svg>
+    <svg
+      id="close-icon"
+      xmlns="http://www.w3.org/2000/svg"
+      class="h-6 w-6 hidden"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M6 18L18 6M6 6l12 12"
+      ></path>
+    </svg>
+  </button>
+
+  <!-- Mobile Navigation Menu -->
+  <div
+    id="mobile-nav"
+    class="md:hidden fixed inset-0 bg-neutral-950/90 backdrop-blur-md flex flex-col justify-center items-center z-50 transform translate-x-full transition-transform duration-300 ease-in-out"
+  >
+    <div class="flex flex-col items-center space-y-6">
       {
         navItems.map((item) => (
           <a
             href={item.url}
-            class="text-2xl font-medium text-neutral-800 dark:text-neutral-200 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+            class="text-neutral-300 hover:text-white text-2xl transition-colors duration-300 mobile-nav-link"
+            aria-label={item.ariaLabel}
           >
-            {item.text}
+            {item.name}
           </a>
         ))
       }
     </div>
   </div>
-
-  <!-- Desktop Navigation -->
-  <ul class="hidden md:flex space-x-8">
-    {
-      navItems.map((item) => (
-        <li>
-          <a
-            href={item.url}
-            class="font-medium text-neutral-800 dark:text-neutral-200 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-          >
-            {item.text}
-          </a>
-        </li>
-      ))
-    }
-  </ul>
 </nav>
 
 <script>
-  // Mobile menu functionality
-  const mobileMenuButton = document.getElementById("mobile-menu-button");
-  const closeMenuButton = document.getElementById("close-menu-button");
-  const mobileMenu = document.getElementById("mobile-menu");
-  const mobileMenuLinks = mobileMenu?.querySelectorAll("a");
+  // Manejo de la navegación móvil
+  document.addEventListener("DOMContentLoaded", () => {
+    const mobileNavToggle = document.getElementById("mobile-nav-toggle");
+    const mobileNav = document.getElementById("mobile-nav");
+    const hamburgerIcon = document.getElementById("hamburger-icon");
+    const closeIcon = document.getElementById("close-icon");
+    const mobileNavLinks = document.querySelectorAll(".mobile-nav-link");
 
-  function openMenu() {
-    mobileMenu?.classList.remove("translate-x-full");
-    document.body.style.overflow = "hidden"; // Prevent scrolling
-  }
+    if (mobileNavToggle && mobileNav && hamburgerIcon && closeIcon) {
+      // Función para alternar la navegación móvil
+      const toggleMobileNav = () => {
+        const isOpen = mobileNav.classList.contains("translate-x-0");
+        
+        if (isOpen) {
+          mobileNav.classList.remove("translate-x-0");
+          mobileNav.classList.add("translate-x-full");
+          hamburgerIcon.classList.remove("hidden");
+          closeIcon.classList.add("hidden");
+          document.body.classList.remove("overflow-hidden");
+        } else {
+          mobileNav.classList.add("translate-x-0");
+          mobileNav.classList.remove("translate-x-full");
+          hamburgerIcon.classList.add("hidden");
+          closeIcon.classList.remove("hidden");
+          document.body.classList.add("overflow-hidden");
+        }
+      };
 
-  function closeMenu() {
-    mobileMenu?.classList.add("translate-x-full");
-    document.body.style.overflow = ""; // Restore scrolling
-  }
+      // Toggle on button click
+      mobileNavToggle.addEventListener("click", toggleMobileNav);
 
-  mobileMenuButton?.addEventListener("click", openMenu);
-  closeMenuButton?.addEventListener("click", closeMenu);
+      // Cerrar la navegación al hacer clic en un enlace
+      mobileNavLinks.forEach((link) => {
+        link.addEventListener("click", toggleMobileNav);
+      });
 
-  // Close menu when clicking on a link
-  mobileMenuLinks?.forEach((link) => {
-    link.addEventListener("click", closeMenu);
+      // Cerrar la navegación si la ventana se redimensiona a un tamaño de escritorio
+      window.addEventListener("resize", () => {
+        if (window.innerWidth >= 768 && mobileNav.classList.contains("translate-x-0")) {
+          mobileNav.classList.remove("translate-x-0");
+          mobileNav.classList.add("translate-x-full");
+          hamburgerIcon.classList.remove("hidden");
+          closeIcon.classList.add("hidden");
+          document.body.classList.remove("overflow-hidden");
+        }
+      });
+    }
   });
 </script>

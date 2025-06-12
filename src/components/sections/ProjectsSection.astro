@@ -8,88 +8,25 @@ interface Props {
 }
 
 const { projects } = Astro.props;
-
-// Project categories for filtering
-const categories = [
-  "All",
-  "Web Development",
-  "Design",
-  "Mobile",
-  "Open Source",
-];
 ---
 
-<section id="projects" class="section-padding relative overflow-hidden">
-  <!-- Fondos decorativos mejorados con más color y profundidad -->
-  <div
-    class="absolute top-20 right-0 translate-x-1/3 w-[35rem] h-[35rem] rounded-full bg-gradient-to-br from-blue-500/10 to-indigo-500/15 dark:from-blue-500/20 dark:to-indigo-500/20 blur-3xl opacity-80 dark:opacity-40 animate-blob"
-  >
-  </div>
+<section id="projects" class="py-24 md:py-32 relative">
+  <!-- Fondo sutil -->
+  <div class="absolute inset-0 bg-gradient-to-b from-neutral-950 to-neutral-900 -z-10"></div>
+  
+  <!-- Elemento decorativo - línea horizontal -->
+  <div class="absolute left-0 top-0 w-full h-px bg-gradient-to-r from-transparent via-neutral-800 to-transparent"></div>
 
-  <div
-    class="absolute top-1/4 left-1/4 -translate-x-1/3 w-[30rem] h-[30rem] rounded-full bg-gradient-to-tr from-purple-400/20 to-pink-500/20 dark:from-purple-400/20 dark:to-pink-500/20 blur-3xl opacity-70 dark:opacity-30 animate-blob animation-delay-2000"
-  >
-  </div>
-
-  <div
-    class="absolute bottom-20 right-1/4 w-[28rem] h-[28rem] rounded-full bg-gradient-to-bl from-blue-500/20 to-indigo-500/20 dark:from-teal-500/20 dark:to-blue-500/20 blur-3xl opacity-70 dark:opacity-30 animate-blob animation-delay-4000"
-  >
-  </div>
-
-  <div
-    class="absolute bottom-[10%] left-[10%] w-[40rem] h-[40rem] rounded-full bg-indigo-600/20 dark:bg-indigo-600/20 blur-3xl opacity-60 dark:opacity-20 mix-blend-multiply"
-  >
-  </div>
-
-  <div class="container-custom relative z-10">
-    <div
-      class="flex flex-col md:flex-row md:items-end md:justify-between mb-16 gap-8"
-    >
-      <!-- Section header -->
-      <div class="max-w-2xl animate-on-scroll">
-        <div class="flex items-center gap-3 mb-4">
-          <Icon
-            name="lucide:folder"
-            class="h-8 w-8 text-primary-600 dark:text-primary-400"
-          />
-          <h2 class="heading-lg text-neutral-900 dark:text-white">
-            Featured Projects
-          </h2>
-        </div>
-        <p class="text-neutral-600 dark:text-neutral-400 text-lg">
-          Here are some of my recent projects. Each one was carefully crafted
-          with attention to detail, performance, and user experience.
-        </p>
+  <div class="container mx-auto px-6 md:px-8 max-w-6xl">
+    <div class="max-w-3xl mb-16 animate-on-scroll">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-1 h-12 bg-gradient-to-b from-neutral-700 to-neutral-600"></div>
+        <h2 class="text-3xl font-bold text-neutral-200">Featured Projects</h2>
       </div>
-
-      <!-- Categories filter - redesigned as pills 
-      <div
-        class="flex flex-wrap gap-2 animate-on-scroll"
-        style="transition-delay: 0.1s"
-      >
-        {
-          categories.map((category, index) => (
-            <button
-              class={`py-2 px-4 rounded-full transition-all duration-300 border text-sm font-medium hover:shadow-md ${
-                index === 0
-                  ? "bg-primary-600 text-white border-primary-600 hover:bg-primary-700 hover:border-primary-700 dark:bg-primary-600 dark:border-primary-600 dark:hover:bg-primary-700 dark:hover:border-primary-700 shadow-md"
-                  : "bg-white/50 text-neutral-700 border-neutral-200/50 hover:border-neutral-300/50 dark:bg-neutral-800/50 dark:text-neutral-300 dark:border-neutral-700/50 dark:hover:border-neutral-600/50"
-              }`}
-              data-filter={category}
-            >
-              {category}
-            </button>
-          ))
-        }
-      </div>
-      -->
     </div>
 
-    <!-- Projects grid - using ProjectCard component -->
-    <div
-      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-      id="projects-grid"
-    >
+    <!-- Grid de proyectos -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
       {
         projects.map((project, index) => (
           <div
@@ -113,59 +50,23 @@ const categories = [
     <div class="text-center mt-16 animate-on-scroll">
       <a
         href="/projects"
-        class="inline-flex items-center gap-2 text-white font-medium transition-colors duration-300 rounded-full shadow-md hover:shadow-lg"
+        class="inline-block px-6 py-3 rounded-lg bg-neutral-800 text-neutral-300 border border-neutral-700 hover:bg-neutral-750 transition-colors duration-200"
       >
-        <span>View All Projects</span>
-        <Icon
-          name="lucide:arrow-right"
-          class="h-4 w-4 transition-transform group-hover:translate-x-0.5"
-        />
+        <span class="flex items-center gap-2">
+          View All Projects
+          <Icon name="lucide:arrow-right" class="h-4 w-4" />
+        </span>
       </a>
     </div>
   </div>
 </section>
 
 <style>
-  /* Animaciones sutiles para los elementos de fondo */
-  @keyframes blob {
-    0% {
-      transform: translate(0, 0) scale(1);
-    }
-    33% {
-      transform: translate(2%, -2%) scale(1.03);
-    }
-    66% {
-      transform: translate(-2%, 2%) scale(0.97);
-    }
-    100% {
-      transform: translate(0, 0) scale(1);
-    }
-  }
-
-  .animate-blob {
-    animation: blob 12s ease-in-out infinite;
-  }
-
-  .animation-delay-2000 {
-    animation-delay: 2s;
-  }
-
-  .animation-delay-4000 {
-    animation-delay: 4s;
-  }
-
-  /* Animación sutil para scroll */
+  /* Animación sutil en scroll */
   .animate-on-scroll {
-    opacity: 1;
-    transform: translateY(0);
-    transition:
-      opacity 0.8s ease-out,
-      transform 0.8s ease-out;
-  }
-
-  .js-enabled .animate-on-scroll {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
   }
 
   .animate-on-scroll.visible {

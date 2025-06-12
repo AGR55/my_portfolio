@@ -6,15 +6,18 @@ import ProjectsSection from "../components/sections/ProjectsSection.astro";
 import ContactSection from "../components/sections/ContactSection.astro";
 import { getCollection } from "astro:content";
 
-// Get featured projects
+// Obtener proyectos destacados para mostrar en la página principal
 const allProjects = await getCollection("projects");
-const featuredProjects = allProjects.filter(project => project.data.featured);
+const featuredProjects = allProjects
+  .filter((project) => project.data.featured)
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 6);
+
+const title = "Adriano González | Full Stack Developer";
+const description = "Portfolio of Adriano González, a full stack developer specialized in creating beautiful, high-performance web applications.";
 ---
 
-<Layout 
-  title="Your Name - Professional Portfolio"
-  description="Professional portfolio showcasing my work, skills, and expertise in design and development."
->
+<Layout title={title} description={description}>
   <HeroSection />
   <AboutSection />
   <ProjectsSection projects={featuredProjects} />
@@ -22,24 +25,6 @@ const featuredProjects = allProjects.filter(project => project.data.featured);
 </Layout>
 
 <script>
-  // Scroll animation
-  document.addEventListener('DOMContentLoaded', () => {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-visible');
-          // Unobserve after animation is triggered
-          observer.unobserve(entry.target);
-        }
-      });
-    }, {
-      root: null,
-      threshold: 0.1, // Trigger animation when 10% of the element is visible
-      rootMargin: '0px 0px -50px 0px' // Adjust based on your needs
-    });
-    
-    document.querySelectorAll('.animate-on-scroll').forEach(el => {
-      observer.observe(el);
-    });
-  });
+  // Importar script de animaciones
+  import "../scripts/animations.js";
 </script>

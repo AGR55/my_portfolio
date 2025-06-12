@@ -1,46 +1,91 @@
+---
+---
+
 <button
   id="theme-toggle"
-  aria-label="Toggle theme"
-  class="fixed bottom-6 right-6 p-3 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 shadow-md hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors z-40"
+  aria-label="Toggle dark mode"
+  class="fixed bottom-6 right-6 p-3 rounded-full bg-neutral-800 border border-neutral-700 hover:bg-neutral-700 text-neutral-300 shadow-lg z-50 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-neutral-900 focus:ring-neutral-400"
 >
-  <!-- Sun icon -->
+  <!-- Sun icon (light mode) -->
   <svg
+    id="light-icon"
     xmlns="http://www.w3.org/2000/svg"
-    class="h-5 w-5 dark:hidden"
-    viewBox="0 0 20 20"
-    fill="currentColor"
+    class="h-5 w-5 hidden"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
   >
     <path
-      fill-rule="evenodd"
-      d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
-      clip-rule="evenodd"></path>
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+    />
   </svg>
-  <!-- Moon icon -->
+  
+  <!-- Moon icon (dark mode) -->
   <svg
+    id="dark-icon"
     xmlns="http://www.w3.org/2000/svg"
-    class="h-5 w-5 hidden dark:block"
-    viewBox="0 0 20 20"
-    fill="currentColor"
+    class="h-5 w-5"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
   >
-    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"
-    ></path>
+    <path
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+    />
   </svg>
 </button>
 
 <script>
-  const themeToggle = document.getElementById("theme-toggle");
-
-  function setTheme(theme: "light" | "dark") {
-    if (theme === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
+  document.addEventListener("DOMContentLoaded", () => {
+    const themeToggle = document.getElementById("theme-toggle");
+    const lightIcon = document.getElementById("light-icon");
+    const darkIcon = document.getElementById("dark-icon");
+    
+    // Función para actualizar los iconos basados en el tema actual
+    const updateIcons = (theme: "light" | "dark") => {
+      if (lightIcon && darkIcon) {
+        if (theme === "light") {
+          lightIcon.classList.add("hidden");
+          darkIcon.classList.remove("hidden");
+        } else {
+          lightIcon.classList.remove("hidden");
+          darkIcon.classList.add("hidden");
+        }
+      }
+    };
+    
+    // Obtener el tema actual y actualizar los iconos
+    const currentTheme = document.documentElement.classList.contains("dark") ? "dark" : "light";
+    updateIcons(currentTheme);
+    
+    // Cambiar el tema al hacer clic
+    if (themeToggle) {
+      themeToggle.addEventListener("click", () => {
+        const isDark = document.documentElement.classList.toggle("dark");
+        
+        const theme = isDark ? "dark" : "light";
+        localStorage.setItem("theme", theme);
+        updateIcons(theme);
+        
+        // Animación sutil al cambiar tema
+        themeToggle.classList.add("scale-90");
+        setTimeout(() => {
+          themeToggle.classList.remove("scale-90");
+        }, 200);
+      });
     }
-    localStorage.setItem("theme", theme);
-  }
-
-  themeToggle?.addEventListener("click", () => {
-    const isDark = document.documentElement.classList.contains("dark");
-    setTheme(isDark ? "light" : "dark");
   });
 </script>
+
+<style>
+  #theme-toggle {
+    transform-origin: center;
+    transition: transform 0.2s ease-in-out;
+  }
+</style>

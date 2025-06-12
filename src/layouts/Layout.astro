@@ -80,27 +80,29 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       }
     </script>
 
-    <!-- Add view transitions for smoother page navigation -->
+    <!-- View transitions for smoother navigation -->
     <ClientRouter />
   </head>
   <body
-    class="bg-gradient-to-br from-white to-neutral-50 dark:from-neutral-900 dark:to-neutral-950 text-neutral-800 dark:text-neutral-200 min-h-screen flex flex-col transition-colors duration-300 antialiased relative"
+    class="bg-gradient-to-b from-neutral-950 via-neutral-900 to-neutral-950 text-neutral-300 min-h-screen flex flex-col transition-colors duration-300 antialiased"
   >
-    <!-- Skip to content link for accessibility -->
+    <!-- Accesibilidad: Saltar al contenido principal -->
     <a
       href="#main-content"
-      class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-white dark:bg-neutral-800 px-4 py-2 z-50 rounded-md shadow-md"
+      class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-neutral-800 text-white px-4 py-2 z-50 rounded-md"
     >
       Skip to content
     </a>
 
-    <!-- Subtle gradient orb in the background -->
+    <!-- Fondo sutil con gradiente - reducido en opacidad -->
     <div
-      class="fixed -top-[40vh] -left-[40vh] w-[100vh] h-[100vh] bg-gradient-to-r from-primary-200/20 to-primary-300/20 dark:from-primary-900/10 dark:to-primary-800/10 rounded-full blur-3xl opacity-70 dark:opacity-30 animate-slow-drift pointer-events-none"
+      class="fixed inset-0 bg-gradient-to-b from-neutral-950 via-neutral-900 to-neutral-950 z-[-2]"
     >
     </div>
-    <div
-      class="fixed -bottom-[40vh] -right-[40vh] w-[100vh] h-[100vh] bg-gradient-to-l from-indigo-200/20 to-blue-300/20 dark:from-indigo-900/10 dark:to-blue-800/10 rounded-full blur-3xl opacity-70 dark:opacity-30 animate-slow-drift animation-delay-2000 pointer-events-none"
+    
+    <!-- Patrones sutiles para textura - versión simplificada -->
+    <div 
+      class="fixed inset-0 bg-[radial-gradient(circle_at_center,rgba(30,41,59,0.3)_0,rgba(15,23,42,0)_50%,rgba(15,23,42,0)_100%)] z-[-1]"
     >
     </div>
 
@@ -110,124 +112,36 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     </main>
     <ThemeToggle />
     <Footer />
-
-    <!-- Custom cursor (optional) -->
-    <div id="custom-cursor" class="custom-cursor"></div>
   </body>
 </html>
 
 <style is:global>
-  /* Animation for background elements */
-  @keyframes slow-drift {
-    0% {
-      transform: translate(0, 0) rotate(0deg);
-    }
-    33% {
-      transform: translate(2%, 2%) rotate(1deg);
-    }
-    66% {
-      transform: translate(-2%, -1%) rotate(-1deg);
-    }
-    100% {
-      transform: translate(0, 0) rotate(0deg);
-    }
-  }
-
-  .animate-slow-drift {
-    animation: slow-drift 30s ease-in-out infinite;
-  }
-
-  .animation-delay-2000 {
-    animation-delay: 2s;
-  }
-
-  /* Custom cursor styling */
-  .custom-cursor {
-    position: fixed;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background-color: rgba(99, 102, 241, 0.6);
-    pointer-events: none;
-    z-index: 9999;
-    transform: translate(-50%, -50%);
-    mix-blend-mode: exclusion;
-    transition:
-      transform 0.1s ease,
-      width 0.2s ease,
-      height 0.2s ease,
-      opacity 0.2s ease;
-    opacity: 0;
-  }
-
-  .cursor-hover {
-    width: 40px;
-    height: 40px;
-    opacity: 0.4;
-  }
-
-  /* Enhanced focus styles for accessibility */
+  /* Estilos para enfoque y selección */
   :focus-visible {
-    outline: 2px solid var(--color-primary-500, #6366f1);
+    outline: 2px solid rgba(59, 130, 246, 0.6);
     outline-offset: 2px;
   }
 
-  /* Smooth scrolling for the whole page */
+  /* Smooth scrolling para la página */
   html.smooth-scroll {
     scroll-behavior: smooth;
   }
 
-  /* Improved text selection */
+  /* Selección de texto mejorada */
   ::selection {
-    background-color: rgba(99, 102, 241, 0.3);
-    color: #312e81;
-  }
-
-  :root.dark ::selection {
-    background-color: rgba(99, 102, 241, 0.4);
-    color: #c7d2fe;
+    background-color: rgba(30, 58, 138, 0.3);
+    color: #e2e8f0;
   }
 </style>
 
 <script>
-  // Enhanced smooth scrolling
   document.addEventListener("DOMContentLoaded", () => {
-    // Only enable smooth scrolling if not using reduced motion
+    // Habilitar scroll suave solo si no hay preferencia por movimiento reducido
     if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       document.documentElement.classList.add("smooth-scroll");
     }
-
-    // Custom cursor implementation
-    const cursor = document.getElementById("custom-cursor");
-    const links = document.querySelectorAll("a, button");
-
-    if (cursor && !("ontouchstart" in window)) {
-      document.addEventListener("mousemove", (e) => {
-        cursor.style.opacity = "1";
-        cursor.style.left = e.clientX + "px";
-        cursor.style.top = e.clientY + "px";
-      });
-
-      document.addEventListener("mouseout", () => {
-        cursor.style.opacity = "0";
-      });
-
-      // Effect for clickable elements
-      links.forEach((link) => {
-        link.addEventListener("mouseenter", () => {
-          cursor.classList.add("cursor-hover");
-        });
-
-        link.addEventListener("mouseleave", () => {
-          cursor.classList.remove("cursor-hover");
-        });
-      });
-    } else if (cursor) {
-      // Hide cursor on touch devices
-      cursor.style.display = "none";
-    }
-
-    // Reveal animations on page load
+    
+    // Animaciones sutiles de entrada al cargar la página
     setTimeout(() => {
       document.querySelectorAll(".animate-on-scroll").forEach((el) => {
         if (el.getBoundingClientRect().top < window.innerHeight) {
@@ -236,16 +150,18 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       });
     }, 300);
 
-    // Intersection Observer for scroll animations
+    // Observer para animaciones de scroll simplificadas
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add("visible");
+            // Dejar de observar una vez visible
+            observer.unobserve(entry.target);
           }
         });
       },
-      { threshold: 0.1 }
+      { threshold: 0.2 }
     );
 
     document

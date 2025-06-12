@@ -1,179 +1,265 @@
 ---
 import { Icon } from "astro-icon/components";
+
+// Información de contacto directo
+const contactInfo = [
+  {
+    icon: "lucide:mail",
+    title: "Email",
+    value: "gonzalezreyesadriano@gmail.com",
+    link: "mailto:gonzalezreyesadriano@gmail.com"
+  },
+  {
+    icon: "lucide:map-pin",
+    title: "Location",
+    value: "La Habana, Cuba",
+    link: null
+  },
+  {
+    icon: "lucide:clock",
+    title: "Working Hours",
+    value: "Monday - Saturday, 9AM - 6PM",
+    link: null
+  }
+];
+
+// Disponibilidad actual
+const availability = {
+  status: "Currently Available",
+  openTo: [
+    "Remote Full‑time Positions",
+    "Freelance Projects",
+    "Technical Consulting",
+    "Code Reviews & Audits"
+  ]
+};
+
 ---
 
-<section id="contact" class="section-padding relative overflow-hidden">
-  <!-- Imagen de fondo posicionada correctamente -->
-  <div class="absolute inset-0 w-full h-full -z-20 blur-2xl">
-    <img
-      src="/illustrations/bitmap.svg"
-      alt="Background Pattern"
-      class="w-full h-full object-cover"
-    />
-  </div>
+<section id="contact" class="py-24 md:py-32 relative">
+  <!-- Fondo básico -->
+  <div class="absolute inset-0 bg-gradient-to-b from-neutral-900 to-neutral-950 -z-10"></div>
+  
+  <!-- Elemento decorativo - línea horizontal -->
+  <div class="absolute left-0 top-0 w-full h-px bg-gradient-to-r from-transparent via-neutral-800 to-transparent"></div>
 
-  <!-- Decorative background elements -->
-  <div
-    class="absolute top-1/4 right-0 translate-x-1/3 w-[30rem] h-[30rem] rounded-full bg-primary-200/40 dark:bg-primary-900/20 blur-3xl opacity-50 dark:opacity-30 -z-10"
-  >
-  </div>
-  <div
-    class="absolute bottom-0 left-1/4 w-[25rem] h-[25rem] rounded-full bg-primary-300/30 dark:bg-primary-800/20 blur-3xl opacity-40 dark:opacity-20 -z-10"
-  >
-  </div>
-
-  <div class="container-custom relative z-10">
-    <div class="w-full mx-auto text-center mb-12 animate-on-scroll">
-      <div class="flex items-center gap-3 mb-4">
-        <Icon
-          name="lucide:mail"
-          class="h-8 w-8 text-primary-600 dark:text-primary-400"
-        />
-        <h2 class="heading-lg text-neutral-900 dark:text-white">Contact</h2>
+  <div class="container mx-auto px-6 md:px-8 max-w-6xl">
+    <div class="mb-12 animate-on-scroll">
+      <div class="flex items-center gap-3">
+        <div class="w-1 h-12 bg-gradient-to-b from-neutral-700 to-neutral-600"></div>
+        <h2 class="text-3xl font-bold text-neutral-200">Contact Me</h2>
       </div>
     </div>
 
-    <div class="w-full mx-auto animate-on-scroll">
-      <div
-        class="bg-white/50 dark:bg-neutral-800/50 backdrop-blur-xl rounded-2xl shadow-xl p-8 border border-neutral-100 dark:border-neutral-700/50"
-      >
-        <form id="contact-form" class="space-y-6">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="form-group">
-              <label
-                for="name"
-                class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2"
-              >
-                Name
-              </label>
-              <div class="relative">
-                <div
-                  class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+    <!-- Nueva estructura de dos columnas -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+      <!-- Columna izquierda: Formulario de contacto -->
+      <div class="lg:col-span-7 animate-on-scroll">
+        <div class="bg-neutral-900 rounded-lg p-6 md:p-8 border border-neutral-800 h-full">
+          <h3 class="text-xl font-semibold text-neutral-200 mb-6">Send a Message</h3>
+          
+          <form id="contact-form" class="space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <!-- Nombre -->
+              <div>
+                <label
+                  for="name"
+                  class="block text-sm font-medium text-neutral-300 mb-2"
                 >
-                  <Icon name="lucide:user" class="h-5 w-5 text-neutral-400" />
-                </div>
+                  Name
+                </label>
                 <input
                   type="text"
                   id="name"
                   name="name"
                   required
-                  class="w-full pl-10 pr-4 py-3 border border-neutral-300 dark:border-neutral-700/50 rounded-lg shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-neutral-800 dark:text-white transition-colors"
+                  class="w-full px-4 py-3 bg-neutral-800 text-neutral-200 border border-neutral-700 rounded-lg focus:outline-none focus:ring-1 focus:ring-neutral-600"
                   placeholder="Your name"
                 />
               </div>
-            </div>
 
-            <div class="form-group">
-              <label
-                for="email"
-                class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2"
-              >
-                Email
-              </label>
-              <div class="relative">
-                <div
-                  class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+              <!-- Email -->
+              <div>
+                <label
+                  for="email"
+                  class="block text-sm font-medium text-neutral-300 mb-2"
                 >
-                  <Icon name="lucide:mail" class="h-5 w-5 text-neutral-400" />
-                </div>
+                  Email
+                </label>
                 <input
                   type="email"
                   id="email"
                   name="email"
                   required
-                  class="w-full pl-10 pr-4 py-3 border border-neutral-300 dark:border-neutral-700/50 rounded-lg shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-neutral-800 dark:text-white transition-colors"
-                  placeholder="your.email@example.com"
+                  class="w-full px-4 py-3 bg-neutral-800 text-neutral-200 border border-neutral-700 rounded-lg focus:outline-none focus:ring-1 focus:ring-neutral-600"
+                  placeholder="you@example.com"
                 />
               </div>
             </div>
-          </div>
 
-          <div class="form-group">
-            <label
-              for="subject"
-              class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2"
-            >
-              Subject
-            </label>
-            <div class="relative">
-              <div
-                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+            <!-- Asunto -->
+            <div>
+              <label
+                for="subject"
+                class="block text-sm font-medium text-neutral-300 mb-2"
               >
-                <Icon
-                  name="lucide:message-square"
-                  class="h-5 w-5 text-neutral-400"
-                />
-              </div>
+                Subject
+              </label>
               <input
                 type="text"
                 id="subject"
                 name="subject"
                 required
-                class="w-full pl-10 pr-4 py-3 border border-neutral-300 dark:border-neutral-700/50 rounded-lg shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-neutral-800 dark:text-white transition-colors"
-                placeholder="What is this regarding?"
+                class="w-full px-4 py-3 bg-neutral-800 text-neutral-200 border border-neutral-700 rounded-lg focus:outline-none focus:ring-1 focus:ring-neutral-600"
+                placeholder="What is this about?"
               />
             </div>
-          </div>
 
-          <div class="form-group">
-            <label
-              for="message"
-              class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2"
-            >
-              Message
-            </label>
-            <div class="relative">
-              <div
-                class="absolute top-3 left-3 flex items-start pointer-events-none"
+            <!-- Mensaje -->
+            <div>
+              <label
+                for="message"
+                class="block text-sm font-medium text-neutral-300 mb-2"
               >
-                <Icon
-                  name="lucide:file-text"
-                  class="h-5 w-5 text-neutral-400"
-                />
-              </div>
+                Message
+              </label>
               <textarea
                 id="message"
                 name="message"
                 rows="5"
                 required
-                class="w-full pl-10 pr-4 py-3 border border-neutral-300 dark:border-neutral-700/50 rounded-lg shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-neutral-800 dark:text-white transition-colors"
-                placeholder="Your message here..."></textarea>
+                class="w-full px-4 py-3 bg-neutral-800 text-neutral-200 border border-neutral-700 rounded-lg focus:outline-none focus:ring-1 focus:ring-neutral-600"
+                placeholder="Your message here..."
+              ></textarea>
+            </div>
+
+            <!-- Botón de envío -->
+            <button
+              type="submit"
+              class="w-full inline-flex justify-center items-center px-6 py-3 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded-lg transition-colors duration-200 border border-neutral-600"
+            >
+              <Icon name="lucide:send" class="h-5 w-5 mr-2" />
+              <span>Send Message</span>
+            </button>
+
+            <div id="form-status" class="hidden text-center p-4 rounded-lg"></div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Columna derecha: Información de contacto adicional -->
+      <div class="lg:col-span-5 animate-on-scroll">
+        <div class="space-y-8">
+          <!-- Información de contacto directo -->
+          <div class="bg-neutral-900 rounded-lg p-6 border border-neutral-800">
+            <h3 class="text-xl font-semibold text-neutral-200 mb-6">Contact Information</h3>
+            
+            <div class="space-y-5">
+              {contactInfo.map(item => (
+                <div class="flex items-start gap-4">
+                  <div class="bg-neutral-800 p-2.5 rounded-full flex-shrink-0">
+                    <Icon name={item.icon} class="h-5 w-5 text-neutral-400" />
+                  </div>
+                  <div>
+                    <h4 class="text-neutral-200 font-medium text-base">{item.title}</h4>
+                    {item.link ? (
+                      <a href={item.link} class="text-neutral-400 hover:text-neutral-300 transition-colors">
+                        {item.value}
+                      </a>
+                    ) : (
+                      <p class="text-neutral-400">{item.value}</p>
+                    )}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
 
-          <button
-            type="submit"
-            class="w-full inline-flex justify-center items-center px-6 py-3 rounded-lg bg-blue-500 hover:bg-blue-600 text-white font-medium transition-colors duration-300 shadow-md hover:shadow-lg"
-          >
-            <Icon name="lucide:send" class="h-5 w-5 mr-2" />
-            Send Message
-          </button>
+          <!-- Disponibilidad actual -->
+          <div class="bg-neutral-900 rounded-lg p-6 border border-neutral-800">
+            <h3 class="text-xl font-semibold text-neutral-200 mb-6">Current Availability</h3>
+            
+            <div class="flex items-center gap-2 mb-3">
+              <span class="inline-block w-2.5 h-2.5 rounded-full bg-teal-500"></span>
+              <span class="text-neutral-200 font-medium">{availability.status}</span>
+            </div>
+            <h4 class="text-neutral-300 font-medium mb-2">Open to:</h4>
+            <ul class="space-y-2">
+              {availability.openTo.map(item => (
+                <li class="flex items-center gap-2">
+                  <Icon name="lucide:check" class="h-4 w-4 text-teal-500" />
+                  <span class="text-neutral-400">{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
 
-          <div id="form-status" class="hidden text-center p-4 rounded-lg"></div>
-        </form>
+          <!-- Conexión rápida con redes sociales -->
+          <div class="bg-neutral-900 rounded-lg p-6 border border-neutral-800">
+            <h3 class="text-xl font-semibold text-neutral-200 mb-4">Connect</h3>
+            
+            <div class="flex gap-3">
+              <a 
+                href="https://github.com/username"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="bg-neutral-800 p-3 rounded-lg flex-1 flex items-center justify-center gap-2 text-neutral-400 hover:text-neutral-200 hover:bg-neutral-750 transition-colors"
+                aria-label="GitHub"
+              >
+                <Icon name="mdi:github" class="h-5 w-5" />
+                <span>GitHub</span>
+              </a>
+              <a 
+                href="https://linkedin.com/in/username"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="bg-neutral-800 p-3 rounded-lg flex-1 flex items-center justify-center gap-2 text-neutral-400 hover:text-neutral-200 hover:bg-neutral-750 transition-colors"
+                aria-label="LinkedIn"
+              >
+                <Icon name="mdi:linkedin" class="h-5 w-5" />
+                <span>LinkedIn</span>
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
+<style>
+  /* Animación sutil */
+  .animate-on-scroll {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  
+  .animate-on-scroll.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+
 <script>
-  // Handle contact form submission
+  // Manejo del formulario de contacto
   document.addEventListener("DOMContentLoaded", () => {
-    const form = document.getElementById("contact-form");
+    const form = document.getElementById("contact-form") as HTMLFormElement;
     const formStatus = document.getElementById("form-status");
 
-    if (form) {
+    if (form && formStatus) {
       form.addEventListener("submit", (e) => {
         e.preventDefault();
-
-        formStatus.classList.remove("hidden", "bg-red-100", "text-red-800");
-        formStatus.classList.add("bg-green-100", "text-green-800");
+        
+        // Mensaje de éxito (para demostración)
         formStatus.textContent = "Your message has been sent successfully!";
-
-        // Reset form
+        formStatus.classList.remove("hidden", "bg-red-900", "text-red-200");
+        formStatus.classList.add("bg-neutral-800", "text-neutral-200", "border", "border-neutral-700");
+        
+        // Reiniciar formulario
         form.reset();
-
-        // Hide success message after 5 seconds
+        
+        // Ocultar mensaje después de 5 segundos
         setTimeout(() => {
           formStatus.classList.add("hidden");
         }, 5000);
