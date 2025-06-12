@@ -3,6 +3,7 @@ import "../styles/global.css";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import ThemeToggle from "../components/ThemeToggle.astro";
+import { ClientRouter } from "astro:transitions";
 
 interface Props {
   title: string;
@@ -15,23 +16,49 @@ const {
   description = "Professional portfolio showcasing my work, skills, and experience.",
   ogImage = "/images/og-image.jpg",
 } = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonicalURL} />
     <meta name="generator" content={Astro.generator} />
+
+    <!-- Primary Meta Tags -->
+    <title>{title}</title>
+    <meta name="title" content={title} />
     <meta name="description" content={description} />
+    <meta name="author" content="Adriano Gonzalez Reyes" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={ogImage} />
-    <meta property="og:type" content="website" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <title>{title}</title>
-    <!-- Script to apply saved theme before page load to prevent flash -->
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={canonicalURL} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={ogImage} />
+
+    <!-- Preload fonts for better performance -->
+    <link
+      rel="preload"
+      href="/fonts/inter-var.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+
+    <!-- Theme handling script -->
     <script is:inline>
       const theme = (() => {
         if (
@@ -52,15 +79,179 @@ const {
         document.documentElement.classList.remove("dark");
       }
     </script>
+
+    <!-- Add view transitions for smoother page navigation -->
+    <ClientRouter />
   </head>
   <body
-    class="bg-white dark:bg-neutral-900 text-gray-800 dark:text-gray-200 min-h-screen flex flex-col transition-colors duration-300"
+    class="bg-gradient-to-br from-white to-neutral-50 dark:from-neutral-900 dark:to-neutral-950 text-neutral-800 dark:text-neutral-200 min-h-screen flex flex-col transition-colors duration-300 antialiased relative"
   >
+    <!-- Skip to content link for accessibility -->
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-white dark:bg-neutral-800 px-4 py-2 z-50 rounded-md shadow-md"
+    >
+      Skip to content
+    </a>
+
+    <!-- Subtle gradient orb in the background -->
+    <div
+      class="fixed -top-[40vh] -left-[40vh] w-[100vh] h-[100vh] bg-gradient-to-r from-primary-200/20 to-primary-300/20 dark:from-primary-900/10 dark:to-primary-800/10 rounded-full blur-3xl opacity-70 dark:opacity-30 animate-slow-drift pointer-events-none"
+    >
+    </div>
+    <div
+      class="fixed -bottom-[40vh] -right-[40vh] w-[100vh] h-[100vh] bg-gradient-to-l from-indigo-200/20 to-blue-300/20 dark:from-indigo-900/10 dark:to-blue-800/10 rounded-full blur-3xl opacity-70 dark:opacity-30 animate-slow-drift animation-delay-2000 pointer-events-none"
+    >
+    </div>
+
     <Header />
-    <main class="flex-grow">
+    <main id="main-content" class="flex-grow relative z-10">
       <slot />
     </main>
     <ThemeToggle />
     <Footer />
+
+    <!-- Custom cursor (optional) -->
+    <div id="custom-cursor" class="custom-cursor"></div>
   </body>
 </html>
+
+<style is:global>
+  /* Animation for background elements */
+  @keyframes slow-drift {
+    0% {
+      transform: translate(0, 0) rotate(0deg);
+    }
+    33% {
+      transform: translate(2%, 2%) rotate(1deg);
+    }
+    66% {
+      transform: translate(-2%, -1%) rotate(-1deg);
+    }
+    100% {
+      transform: translate(0, 0) rotate(0deg);
+    }
+  }
+
+  .animate-slow-drift {
+    animation: slow-drift 30s ease-in-out infinite;
+  }
+
+  .animation-delay-2000 {
+    animation-delay: 2s;
+  }
+
+  /* Custom cursor styling */
+  .custom-cursor {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: rgba(99, 102, 241, 0.6);
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    mix-blend-mode: exclusion;
+    transition:
+      transform 0.1s ease,
+      width 0.2s ease,
+      height 0.2s ease,
+      opacity 0.2s ease;
+    opacity: 0;
+  }
+
+  .cursor-hover {
+    width: 40px;
+    height: 40px;
+    opacity: 0.4;
+  }
+
+  /* Enhanced focus styles for accessibility */
+  :focus-visible {
+    outline: 2px solid var(--color-primary-500, #6366f1);
+    outline-offset: 2px;
+  }
+
+  /* Smooth scrolling for the whole page */
+  html.smooth-scroll {
+    scroll-behavior: smooth;
+  }
+
+  /* Improved text selection */
+  ::selection {
+    background-color: rgba(99, 102, 241, 0.3);
+    color: #312e81;
+  }
+
+  :root.dark ::selection {
+    background-color: rgba(99, 102, 241, 0.4);
+    color: #c7d2fe;
+  }
+</style>
+
+<script>
+  // Enhanced smooth scrolling
+  document.addEventListener("DOMContentLoaded", () => {
+    // Only enable smooth scrolling if not using reduced motion
+    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      document.documentElement.classList.add("smooth-scroll");
+    }
+
+    // Custom cursor implementation
+    const cursor = document.getElementById("custom-cursor");
+    const links = document.querySelectorAll("a, button");
+
+    if (cursor && !("ontouchstart" in window)) {
+      document.addEventListener("mousemove", (e) => {
+        cursor.style.opacity = "1";
+        cursor.style.left = e.clientX + "px";
+        cursor.style.top = e.clientY + "px";
+      });
+
+      document.addEventListener("mouseout", () => {
+        cursor.style.opacity = "0";
+      });
+
+      // Effect for clickable elements
+      links.forEach((link) => {
+        link.addEventListener("mouseenter", () => {
+          cursor.classList.add("cursor-hover");
+        });
+
+        link.addEventListener("mouseleave", () => {
+          cursor.classList.remove("cursor-hover");
+        });
+      });
+    } else if (cursor) {
+      // Hide cursor on touch devices
+      cursor.style.display = "none";
+    }
+
+    // Reveal animations on page load
+    setTimeout(() => {
+      document.querySelectorAll(".animate-on-scroll").forEach((el) => {
+        if (el.getBoundingClientRect().top < window.innerHeight) {
+          el.classList.add("visible");
+        }
+      });
+    }, 300);
+
+    // Intersection Observer for scroll animations
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    document
+      .querySelectorAll(".animate-on-scroll:not(.visible)")
+      .forEach((el) => {
+        observer.observe(el);
+      });
+  });
+</script>
