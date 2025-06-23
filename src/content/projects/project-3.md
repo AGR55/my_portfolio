@@ -1,7 +1,7 @@
 ---
 title: "RFID System"
 description: "A desktop application for RFID tag management and device control, featuring real-time data visualization and hardware integration capabilities."
-image: "projects/rfid-system.png"
+image: "projects/rfid-system.webp"
 featured: true
 date: 2025-06-17
 tags: ["Desktop", "UI/UX Design", "PyQt6"]

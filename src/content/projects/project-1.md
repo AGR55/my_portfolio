@@ -1,7 +1,7 @@
 ---
 title: "E-commerce Website"
 description: "Frontend development of an e-commerce platform focusing on user experience and conversion optimization."
-image: "projects/esaki.png"
+image: "projects/esaki.webp"
 featured: true
 date: 2025-03-20
 tags: ["Web Development", "UI/UX Design", "E-commerce"]
