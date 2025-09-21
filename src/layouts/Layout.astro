@@ -135,22 +135,23 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 </style>
 
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
+  // Función para inicializar animaciones
+  function initAnimations() {
     // Habilitar scroll suave solo si no hay preferencia por movimiento reducido
     if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       document.documentElement.classList.add("smooth-scroll");
     }
     
-    // Animaciones sutiles de entrada al cargar la página
-    setTimeout(() => {
-      document.querySelectorAll(".animate-on-scroll").forEach((el) => {
+    // Hacer visibles los elementos que ya están en el viewport
+    const makeVisibleInViewport = () => {
+      document.querySelectorAll(".animate-on-scroll:not(.visible)").forEach((el) => {
         if (el.getBoundingClientRect().top < window.innerHeight) {
           el.classList.add("visible");
         }
       });
-    }, 300);
+    };
 
-    // Observer para animaciones de scroll simplificadas
+    // Observer para animaciones de scroll
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -164,10 +165,37 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       { threshold: 0.2 }
     );
 
-    document
-      .querySelectorAll(".animate-on-scroll:not(.visible)")
-      .forEach((el) => {
-        observer.observe(el);
-      });
-  });
+    // Observar elementos que aún no son visibles
+    const observeElements = () => {
+      document
+        .querySelectorAll(".animate-on-scroll:not(.visible)")
+        .forEach((el) => {
+          observer.observe(el);
+        });
+    };
+
+    // Ejecutar inmediatamente
+    makeVisibleInViewport();
+    observeElements();
+
+    // También ejecutar cuando la página esté completamente cargada
+    window.addEventListener("load", () => {
+      makeVisibleInViewport();
+      observeElements();
+    });
+
+    // Para navegación con View Transitions (Astro)
+    document.addEventListener("astro:page-load", () => {
+      makeVisibleInViewport();
+      observeElements();
+    });
+  }
+
+  // Ejecutar cuando el DOM esté listo
+  if (document.readyState === 'loading') {
+    document.addEventListener("DOMContentLoaded", initAnimations);
+  } else {
+    // DOM ya está listo
+    initAnimations();
+  }
 </script>

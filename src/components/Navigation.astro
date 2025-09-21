@@ -1,6 +1,6 @@
 ---
 const navItems = [
-  { name: "Home", url: "/#", ariaLabel: "Go to home page" },
+  { name: "Home", url: "/", ariaLabel: "Go to home page" },
   { name: "About", url: "/#about", ariaLabel: "Learn about me" },
   { name: "Projects", url: "/#projects", ariaLabel: "View my projects" },
   { name: "Contact", url: "/#contact", ariaLabel: "Get in touch" },
@@ -14,11 +14,11 @@ const navItems = [
       navItems.map((item) => (
         <a
           href={item.url}
-          class="text-neutral-400 hover:text-neutral-200 transition-colors duration-300 py-1 relative group"
+          class="text-neutral-400 hover:text-neutral-200 transition-colors duration-300 py-1 relative group nav-link"
           aria-label={item.ariaLabel}
         >
           {/* Línea de destaque al hacer hover */}
-          <span class="absolute bottom-0 left-0 w-0 h-px bg-neutral-500 transition-all duration-300 group-hover:w-full"></span>
+          <span class="absolute bottom-0 left-0 w-0 h-px bg-neutral-500 transition-all duration-300 group-hover:w-full" />
           {item.name}
         </a>
       ))
@@ -43,8 +43,7 @@ const navItems = [
         stroke-linecap="round"
         stroke-linejoin="round"
         stroke-width="2"
-        d="M4 6h16M4 12h16M4 18h16"
-      ></path>
+        d="M4 6h16M4 12h16M4 18h16"></path>
     </svg>
     <svg
       id="close-icon"
@@ -58,8 +57,7 @@ const navItems = [
         stroke-linecap="round"
         stroke-linejoin="round"
         stroke-width="2"
-        d="M6 18L18 6M6 6l12 12"
-      ></path>
+        d="M6 18L18 6M6 6l12 12"></path>
     </svg>
   </button>
 
@@ -85,19 +83,22 @@ const navItems = [
 </nav>
 
 <script>
-  // Manejo de la navegación móvil
+  // Manejo de la navegación móvil y navegación suave
   document.addEventListener("DOMContentLoaded", () => {
     const mobileNavToggle = document.getElementById("mobile-nav-toggle");
     const mobileNav = document.getElementById("mobile-nav");
     const hamburgerIcon = document.getElementById("hamburger-icon");
     const closeIcon = document.getElementById("close-icon");
     const mobileNavLinks = document.querySelectorAll(".mobile-nav-link");
+    const allNavLinks = document.querySelectorAll(
+      ".nav-link, .mobile-nav-link"
+    );
 
-    if (mobileNavToggle && mobileNav && hamburgerIcon && closeIcon) {
-      // Función para alternar la navegación móvil
-      const toggleMobileNav = () => {
+    // Función para alternar la navegación móvil
+    const toggleMobileNav = () => {
+      if (mobileNav && hamburgerIcon && closeIcon) {
         const isOpen = mobileNav.classList.contains("translate-x-0");
-        
+
         if (isOpen) {
           mobileNav.classList.remove("translate-x-0");
           mobileNav.classList.add("translate-x-full");
@@ -111,19 +112,50 @@ const navItems = [
           closeIcon.classList.remove("hidden");
           document.body.classList.add("overflow-hidden");
         }
-      };
+      }
+    };
 
+    // Función para manejar navegación suave
+    const handleNavigation = (e: Event) => {
+      const href = (e.target as HTMLElement).getAttribute("href");
+
+      // Si es la página principal y estamos ya en ella, scroll al top
+      if (href === "/" && window.location.pathname === "/") {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        return;
+      }
+
+      // Si es un enlace de ancla en la misma página
+      if (href && href.startsWith("/#")) {
+        const targetId = href.substring(2); // Quitar "/#"
+        const targetElement = document.getElementById(targetId);
+
+        if (targetElement) {
+          e.preventDefault();
+          targetElement.scrollIntoView({ behavior: "smooth" });
+        }
+      }
+    };
+
+    if (mobileNavToggle && mobileNav && hamburgerIcon && closeIcon) {
       // Toggle on button click
       mobileNavToggle.addEventListener("click", toggleMobileNav);
 
-      // Cerrar la navegación al hacer clic en un enlace
+      // Cerrar la navegación al hacer clic en un enlace móvil
       mobileNavLinks.forEach((link) => {
-        link.addEventListener("click", toggleMobileNav);
+        link.addEventListener("click", (e) => {
+          handleNavigation(e);
+          toggleMobileNav();
+        });
       });
 
       // Cerrar la navegación si la ventana se redimensiona a un tamaño de escritorio
       window.addEventListener("resize", () => {
-        if (window.innerWidth >= 768 && mobileNav.classList.contains("translate-x-0")) {
+        if (
+          window.innerWidth >= 768 &&
+          mobileNav.classList.contains("translate-x-0")
+        ) {
           mobileNav.classList.remove("translate-x-0");
           mobileNav.classList.add("translate-x-full");
           hamburgerIcon.classList.remove("hidden");
@@ -132,5 +164,10 @@ const navItems = [
         }
       });
     }
+
+    // Agregar manejo de navegación suave a todos los enlaces de navegación
+    allNavLinks.forEach((link) => {
+      link.addEventListener("click", handleNavigation);
+    });
   });
 </script>
